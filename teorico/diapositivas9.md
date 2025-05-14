@@ -97,3 +97,114 @@
     ![Figura 5](images/d9fig5.png)
 
     ![Figura 6](images/d9fig6.png)
+
+#### Operaciones del sistema
+
+- Los diagramas de secuencia del sistema ilustran la forma en que los actores realizan las "invocaciones" sobre el sistema.
+- Al estudiar la arquitectura lógica es posible profundizar en los detalles de como se realizan dichas invocaciones.
+
+    ![Figura 7](images/d9fig7.png)
+
+##### Implementación de ejemplo
+
+Veamos un ejemplo de implementación de este esquema para entender mejor el tema:
+
+```cpp
+// pertenece en forma lógica a la capa de presentación
+class Menu {
+    IRetiro atm;
+
+    void mostrarMenu() {
+        // leer en t el número de tarjeta
+        atm.ingresarTarjeta(t);
+        // leer en p el PIN
+        atm.ingresarPIN(p);
+        // leer en c el número de cuenta
+        atm.seleccionarCuenta(c);
+        // continua...
+    }
+}
+
+// pertenecen en fórma lógica a la capa lógica
+interface IRetiro {
+    void ingresarTarjeta();
+    void ingresarPIN();
+    void seleccionarCuenta();
+}
+
+class Cajero realize IRetiro {
+    public void ingresarTarjeta() {...};
+    public void ingresarPIN() {...};
+    public void seleccionarCuenta() {...};
+    // continua...
+}
+```
+
+### Diseño de bajo nivel
+
+- Tenemos definida la estructura interna del sistema a construir (arquitectura lógica).
+- A partir de dicha estructura definimos **como** se resuelven internamente cada una de las operaciones del sistema.
+- En este curso, el diseño de bajo nivel estará enfocado en la capa lógica.
+- Esta información compondrá lo que llamaremos **modelo de diseño**.
+
+#### Objetivos
+
+- Diseñar colaboraciones que realicen los casos de uso del sistema.
+    - Se busca diseñar una colaboración por cada caso de uso (o varios de ellos juntos)
+    - Una colaboración realiza un conjunto de casos de uso cuando define su solución.
+    - Esta relación es la misma que se puede definir entre una interfaz y un conjunto de clases.
+
+    ![Figura 8](images/d9fig8.png)
+
+#### Colaboración
+
+- Una colaboración está compuesta por:
+    - Una **estructura:** que indica
+        - Las clases de objetos que participan en la solución de los casos de uso
+        - Los atributos de las mismas y sus relaciones
+        - Las operaciones que pueden ser invocadas sobre sus instancias
+    - **Interacciones:** que definen la forma en que objetos de las clases dadas se comunican para obtener el resultado deseado.
+- La estructura de la colaboración indica **quién** participa y sus propiedades.
+- Las interacciones de la colaboración indica **como** los participantes logran el resultado.
+- Por lo tanto una colaboración que realice un conjunto de casos de uso contendrá:
+    - La estructura de los participantes
+    - Una interacción en términos de dichos participantes **para cada operación del sistema**
+        - En cada interacción se detalla la forma en que cada operación es resuelta
+- Existen dos enfoques para diseñar una colaboración:
+    - Definir primero la estructura y luego generar las diferentes interacciones "respetándola"
+    - Definir "libremente" las interacciones y luego definir la estructura necesaria para que éstas puedan ocurrir
+- En el curso seguimos el segundo enfoque.
+- Para lograr los objetivos planteados, realizaremos las siguientes actividades:
+    - Diseño de interacciones
+    - Diseño de la estructura
+
+##### Diseño de interacciones
+
+- Consiste en definir comunicaciones entre objetos que permitan resolver operaciones del sistema.
+- Esta definición se realiza "libremente".
+    - Los protagonistas aparecen sugeridos en el **modelo de dominio**
+    - El resultado es el específicado en el contrato de la operación del sistema a diseñar
+- La libertad está dada en los mensajes que los protagonistas se puedan enviar entre si.
+- Herramienta: **diagrama de comunicación**
+
+##### Diseño de la estructura
+
+- Consiste en especificar completamente la estructura necesaria para que todas las interacciones puedan ocurrir
+    - Se busca especificar la estructura de una colaboración
+    - Por lo tanto es necesario considerar todas las interacciones del caso de uso que la colaboración realiza
+    - Recordar que se define una interacción por cada operación del sistema
+    - Herramienta: **diagrama de clases de diseño**
+
+##### Consideraciones
+
+- Durante la etapa de diseño de una metodología iterativa e incremental se obtienen un conjunto de colaboraciones que comprenden todos los casos de uso del sistema.
+- En consecuencia, se obtiene un diagrama de comunicación por operación del sistema y un conjunto de DCDs, uno por colaboración.
+- Los DCDs pueden requerir algún tipo de revisión de alguien con una visión global de la solución a los efectos de eliminar inconsistencias.
+- Durante el diseño la idea clave es la asignación de responsabilidades.
+- La asignación de responsabilidades, se realiza (en parte) **definiendo operaciones** para los participantes de la solución.
+- Es posible definir diferentes interacciones para lograr un mismo efecto.
+- Esto es asignando responsabilidades de maneras diferentes.
+- A pesar de que pueden existir varias soluciones, no todas tienen las mismas cualidades (flexibilidad, extensibilidad, adaptabilidad, etc.).
+- Buscaremos encontrar soluciones que además presenten buenas cualidades.
+- Para ello utilizaremos criterios de asignación de responsabilidades.
+- Estos criterios buscan evitar la toma de malas decisiones al momento de asignar responsabilidades.
